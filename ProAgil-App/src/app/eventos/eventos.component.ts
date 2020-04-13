@@ -8,7 +8,21 @@ import { HttpClient } from '@angular/common/http';
 })
 export class EventosComponent implements OnInit {
 
-  eventos: any;
+  filtro: string;
+  get filtroLista() {
+    return this.filtro;
+  }
+  set filtroLista(value: string) {
+    this.filtro = value;
+    this.eventosFiltrados = this.filtroLista ? this.filtrarEventos(this.filtroLista) : this.eventos;
+  }
+
+  eventosFiltrados: any = [];
+  eventos: any = [];
+  imagemLargura = 50;
+  imagemMargem = 2;
+  imagem = false;
+
 
   constructor(private http: HttpClient) { }
 
@@ -22,6 +36,17 @@ export class EventosComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  mostrarImagem() {
+    this.imagem = !this.imagem;
+  }
+
+  filtrarEventos(filtrarPor: string): any {
+    filtrarPor = filtrarPor.toLocaleLowerCase();
+    return this.eventos.filter(
+      evento => evento.tema.toLocaleLowerCase().indexOf(filtrarPor) !== -1
+    );
   }
 
 }
