@@ -6,9 +6,9 @@ namespace ProAgil.Domain
     public string nome { get; set; }
     public string URL { get; set; }
 
-    public int? enventoId { get; set; }
-    public Evento envento { get; set; }
+    public int? eventoId { get; set; }
+    public Evento evento { get; }
     public int? oradorId { get; set; }
-    public Orador ordador { get; set; }
+    public Orador ordador { get; }
   }
 }

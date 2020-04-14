@@ -99,15 +99,15 @@ namespace ProAgil.Repository.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     nome = table.Column<string>(nullable: true),
                     URL = table.Column<string>(nullable: true),
-                    enventoId = table.Column<int>(nullable: true),
+                    eventoId = table.Column<int>(nullable: true),
                     oradorId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RedesSociais", x => x.id);
                     table.ForeignKey(
-                        name: "FK_RedesSociais_Eventos_enventoId",
-                        column: x => x.enventoId,
+                        name: "FK_RedesSociais_Eventos_eventoId",
+                        column: x => x.eventoId,
                         principalTable: "Eventos",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
@@ -130,9 +130,9 @@ namespace ProAgil.Repository.Migrations
                 column: "oradorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RedesSociais_enventoId",
+                name: "IX_RedesSociais_eventoId",
                 table: "RedesSociais",
-                column: "enventoId");
+                column: "eventoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RedesSociais_oradorId",

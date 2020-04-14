@@ -12,68 +12,70 @@ namespace ProAgil.Repository
     public ProAgilRepository(ProAgilContext context)
     {
       this.context = context;
+      this.context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
     }
 
     // Geral
     public void Add<T>(T entity) where T : class
     {
-      context.Add(entity);
+      this.context.Add(entity);
     }
 
     public void Update<T>(T entity) where T : class
     {
-      context.Update(entity);
+      this.context.Update(entity);
     }
 
     public void Delete<T>(T entity) where T : class
     {
-      context.Remove(entity);
+      this.context.Remove(entity);
     }
 
     public async Task<bool> SaveChangesAsync()
     {
-      return (await context.SaveChangesAsync()) > 0;
+      return (await this.context.SaveChangesAsync()) > 0;
     }
 
     // Evento
     public async Task<Evento[]> GetAllEventoAsync(bool includeOradores = false)
     {
-      IQueryable<Evento> query = context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
+
+      IQueryable<Evento> query = this.context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
 
       if (includeOradores)
       {
-        query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        // query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
       }
 
-      query = query.OrderByDescending(c => c.dataEvento);
+      query = query.AsNoTracking().OrderByDescending(c => c.dataEvento);
 
       return await query.ToArrayAsync();
     }
 
     public async Task<Evento[]> GetAllEventoAsyncByTema(string tema, bool includeOradores)
     {
-      IQueryable<Evento> query = context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
+      IQueryable<Evento> query = this.context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
 
       if (includeOradores)
       {
-        query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        //query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
       }
 
-      query = query.OrderByDescending(c => c.dataEvento).Where(c => c.tema.Contains(tema));
+      query = query.AsNoTracking().OrderByDescending(c => c.dataEvento).Where(c => c.tema.Contains(tema));
 
       return await query.ToArrayAsync();
     }
 
     public async Task<Evento> GetEventoAsyncById(int eventoId, bool includeOradores)
     {
-      IQueryable<Evento> query = context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
+      IQueryable<Evento> query = this.context.Eventos.Include(c => c.lotes).Include(c => c.redesSociais);
 
       if (includeOradores)
       {
-        query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        //query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
       }
 
-      query = query.OrderByDescending(c => c.dataEvento).Where(c => c.id == eventoId);
+      query = query.AsNoTracking().OrderByDescending(c => c.dataEvento).Where(c => c.id == eventoId);
 
       return await query.FirstOrDefaultAsync();
     }
@@ -81,28 +83,28 @@ namespace ProAgil.Repository
     // Orador
     public async Task<Orador[]> GetAllOradorAsyncByName(string nome, bool includeEventos = false)
     {
-      IQueryable<Orador> query = context.Oradores.Include(c => c.redesSociais);
+      IQueryable<Orador> query = this.context.Oradores.Include(c => c.redesSociais);
 
       if (includeEventos)
       {
-        query = query.Include(oe => oe.oradoresEvento).ThenInclude(e => e.evento);
+        query = query.AsNoTracking().Include(oe => oe.oradoresEvento).ThenInclude(e => e.evento);
       }
 
-      query = query.Where(o => o.nome.ToLower().Contains(nome.ToLower()));
+      query = query.AsNoTracking().Where(o => o.nome.ToLower().Contains(nome.ToLower()));
 
       return await query.ToArrayAsync();
     }
 
     public async Task<Orador> GetOradorAsyncById(int oradorId, bool includeEventos = false)
     {
-      IQueryable<Orador> query = context.Oradores.Include(c => c.redesSociais);
+      IQueryable<Orador> query = this.context.Oradores.Include(c => c.redesSociais);
 
       if (includeEventos)
       {
         query = query.Include(oe => oe.oradoresEvento).ThenInclude(e => e.evento);
       }
 
-      query = query.OrderBy(o => o.nome).Where(o => o.id == oradorId);
+      query = query.AsNoTracking().OrderBy(o => o.nome).Where(o => o.id == oradorId);
 
       return await query.FirstOrDefaultAsync();
     }

@@ -104,7 +104,7 @@ namespace ProAgil.Repository.Migrations
 
                     b.Property<string>("URL");
 
-                    b.Property<int?>("enventoId");
+                    b.Property<int?>("eventoId");
 
                     b.Property<string>("nome");
 
@@ -112,7 +112,7 @@ namespace ProAgil.Repository.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("enventoId");
+                    b.HasIndex("eventoId");
 
                     b.HasIndex("oradorId");
 
@@ -121,7 +121,7 @@ namespace ProAgil.Repository.Migrations
 
             modelBuilder.Entity("ProAgil.Domain.Lote", b =>
                 {
-                    b.HasOne("ProAgil.Domain.Evento", "evento")
+                    b.HasOne("ProAgil.Domain.Evento")
                         .WithMany("lotes")
                         .HasForeignKey("eventoId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -129,12 +129,12 @@ namespace ProAgil.Repository.Migrations
 
             modelBuilder.Entity("ProAgil.Domain.OradorEvento", b =>
                 {
-                    b.HasOne("ProAgil.Domain.Evento", "evento")
+                    b.HasOne("ProAgil.Domain.Evento")
                         .WithMany("oradoresEvento")
                         .HasForeignKey("eventoId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ProAgil.Domain.Orador", "orador")
+                    b.HasOne("ProAgil.Domain.Orador")
                         .WithMany("oradoresEvento")
                         .HasForeignKey("oradorId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -142,11 +142,11 @@ namespace ProAgil.Repository.Migrations
 
             modelBuilder.Entity("ProAgil.Domain.RedeSocial", b =>
                 {
-                    b.HasOne("ProAgil.Domain.Evento", "envento")
+                    b.HasOne("ProAgil.Domain.Evento")
                         .WithMany("redesSociais")
-                        .HasForeignKey("enventoId");
+                        .HasForeignKey("eventoId");
 
-                    b.HasOne("ProAgil.Domain.Orador", "ordador")
+                    b.HasOne("ProAgil.Domain.Orador")
                         .WithMany("redesSociais")
                         .HasForeignKey("oradorId");
                 });
