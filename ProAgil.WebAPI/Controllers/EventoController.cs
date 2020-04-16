@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using AutoMapper;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProAgil.Domain;
 using ProAgil.Repository;
+using ProAgil.WebAPI.Dto;
 
 namespace ProAgil.WebAPI.Controllers
 {
@@ -12,8 +14,11 @@ namespace ProAgil.WebAPI.Controllers
   public class EventoController : ControllerBase
   {
     private readonly IProAgilRepository repo;
-    public EventoController(IProAgilRepository repo)
+    private readonly IMapper mapper;
+
+    public EventoController(IProAgilRepository repo, IMapper mapper)
     {
+      this.mapper = mapper;
       this.repo = repo;
     }
 
@@ -24,13 +29,15 @@ namespace ProAgil.WebAPI.Controllers
       // Abertura de uma nova thread
       try
       {
-        var results = await repo.GetAllEventoAsync(true); // espera que o processo termine
+        var eventos = await repo.GetAllEventoAsync(true); // espera que o processo termine
+
+        var results = this.mapper.Map<EventoDto[]>(eventos);
 
         return Ok(results);
       }
-      catch (System.Exception e)
+      catch (System.Exception ex)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, new {erro = e});
+        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de Dados Falhou {ex.Message}");
       }
     }
 
@@ -41,7 +48,9 @@ namespace ProAgil.WebAPI.Controllers
       // Abertura de uma nova thread
       try
       {
-        var results = await repo.GetEventoAsyncById(eventoId, true); // espera que o processo termine
+        var evento = await repo.GetEventoAsyncById(eventoId, true); // espera que o processo termine
+
+        var results = this.mapper.Map<EventoDto>(evento);
 
         return Ok(results);
       }
@@ -58,7 +67,9 @@ namespace ProAgil.WebAPI.Controllers
       // Abertura de uma nova thread
       try
       {
-        var results = await repo.GetAllEventoAsyncByTema(tema, true); // espera que o processo termine
+        var eventos = await repo.GetAllEventoAsyncByTema(tema, true); // espera que o processo termine
+
+        var results = this.mapper.Map<EventoDto[]>(eventos);
 
         return Ok(results);
       }
@@ -70,21 +81,23 @@ namespace ProAgil.WebAPI.Controllers
 
     // POST api/eventos
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<Evento>>> Post(Evento model)
+    public async Task<ActionResult<IEnumerable<Evento>>> Post(EventoDto model)
     {
       // Abertura de uma nova thread
       try
       {
-        this.repo.Add(model);
+        var evento = this.mapper.Map<Evento>(model);
 
-        if(await this.repo.SaveChangesAsync())
+        this.repo.Add(evento);
+
+        if (await this.repo.SaveChangesAsync())
         {
-            return Created($"/api/evento/{model.id}", model);
+          return Created($"/api/evento/{model.id}", this.mapper.Map<EventoDto>(evento));
         }
       }
-      catch (System.Exception e)
+      catch (System.Exception ex)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
+        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de Dados Falhou {ex.Message}");
       }
 
       return BadRequest();
@@ -92,20 +105,22 @@ namespace ProAgil.WebAPI.Controllers
 
     // PUT api/eventos/id
     [HttpPut("{eventoId}")]
-    public async Task<ActionResult<IEnumerable<Evento>>> Put(int eventoId, Evento model)
+    public async Task<ActionResult<IEnumerable<Evento>>> Put(int eventoId, EventoDto model)
     {
       // Abertura de uma nova thread
       try
       {
         var evento = await this.repo.GetEventoAsyncById(eventoId, false);
 
-        if(evento == null) return NotFound();
+        if (evento == null) return NotFound();
 
-        this.repo.Update(model);
+        this.mapper.Map(model, evento);
+
+        this.repo.Update(evento);
 
         if (await this.repo.SaveChangesAsync())
         {
-          return Created($"/api/evento/{model.id}", model);
+          return Created($"/api/evento/{model.id}", this.mapper.Map<EventoDto>(evento));
         }
       }
       catch (System.Exception e)
