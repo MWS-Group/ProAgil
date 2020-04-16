@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProAgil.Repository;
 
 namespace ProAgil.Repository.Migrations
 {
     [DbContext(typeof(ProAgilContext))]
-    partial class ProAgilContextModelSnapshot : ModelSnapshot
+    [Migration("20200415123131_changes1")]
+    partial class changes1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -129,13 +131,13 @@ namespace ProAgil.Repository.Migrations
 
             modelBuilder.Entity("ProAgil.Domain.OradorEvento", b =>
                 {
-                    b.HasOne("ProAgil.Domain.Evento", "evento")
+                    b.HasOne("ProAgil.Domain.Evento")
                         .WithMany("oradoresEventos")
                         .HasForeignKey("eventoId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("ProAgil.Domain.Orador", "orador")
-                        .WithMany("oradoresEventos")
+                    b.HasOne("ProAgil.Domain.Orador")
+                        .WithMany("oradoresEvento")
                         .HasForeignKey("oradorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

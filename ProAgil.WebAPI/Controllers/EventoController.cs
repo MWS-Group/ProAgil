@@ -28,9 +28,9 @@ namespace ProAgil.WebAPI.Controllers
 
         return Ok(results);
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new {erro = e});
       }
     }
 
@@ -45,9 +45,9 @@ namespace ProAgil.WebAPI.Controllers
 
         return Ok(results);
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
       }
     }
 
@@ -62,9 +62,9 @@ namespace ProAgil.WebAPI.Controllers
 
         return Ok(results);
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
       }
     }
 
@@ -82,16 +82,16 @@ namespace ProAgil.WebAPI.Controllers
             return Created($"/api/evento/{model.id}", model);
         }
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
       }
 
       return BadRequest();
     }
 
     // PUT api/eventos/id
-    [HttpPut]
+    [HttpPut("{eventoId}")]
     public async Task<ActionResult<IEnumerable<Evento>>> Put(int eventoId, Evento model)
     {
       // Abertura de uma nova thread
@@ -108,16 +108,16 @@ namespace ProAgil.WebAPI.Controllers
           return Created($"/api/evento/{model.id}", model);
         }
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
       }
 
       return BadRequest();
     }
 
     // DELETE api/eventos/id
-    [HttpDelete]
+    [HttpDelete("{eventoId}")]
     public async Task<ActionResult<IEnumerable<Evento>>> Delete(int eventoId)
     {
       // Abertura de uma nova thread
@@ -134,9 +134,9 @@ namespace ProAgil.WebAPI.Controllers
           return Ok();
         }
       }
-      catch (System.Exception)
+      catch (System.Exception e)
       {
-        return this.StatusCode(StatusCodes.Status500InternalServerError, "Banco Dados Falhou");
+        return this.StatusCode(StatusCodes.Status500InternalServerError, new { erro = e });
       }
 
       return BadRequest();

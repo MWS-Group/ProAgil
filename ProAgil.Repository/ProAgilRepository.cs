@@ -44,7 +44,7 @@ namespace ProAgil.Repository
 
       if (includeOradores)
       {
-        // query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        query = query.Include(oe => oe.oradoresEventos).ThenInclude(o => o.orador);
       }
 
       query = query.AsNoTracking().OrderByDescending(c => c.dataEvento);
@@ -58,7 +58,7 @@ namespace ProAgil.Repository
 
       if (includeOradores)
       {
-        //query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        query = query.Include(oe => oe.oradoresEventos).ThenInclude(o => o.orador);
       }
 
       query = query.AsNoTracking().OrderByDescending(c => c.dataEvento).Where(c => c.tema.Contains(tema));
@@ -72,7 +72,7 @@ namespace ProAgil.Repository
 
       if (includeOradores)
       {
-        //query = query.Include(oe => oe.oradoresEvento).ThenInclude(o => o.orador);
+        query = query.Include(oe => oe.oradoresEventos).ThenInclude(o => o.orador);
       }
 
       query = query.AsNoTracking().OrderByDescending(c => c.dataEvento).Where(c => c.id == eventoId);
@@ -87,7 +87,7 @@ namespace ProAgil.Repository
 
       if (includeEventos)
       {
-        query = query.AsNoTracking().Include(oe => oe.oradoresEvento).ThenInclude(e => e.evento);
+        query = query.AsNoTracking().Include(oe => oe.oradoresEventos).ThenInclude(e => e.evento);
       }
 
       query = query.AsNoTracking().Where(o => o.nome.ToLower().Contains(nome.ToLower()));
@@ -101,7 +101,7 @@ namespace ProAgil.Repository
 
       if (includeEventos)
       {
-        query = query.Include(oe => oe.oradoresEvento).ThenInclude(e => e.evento);
+        query = query.Include(oe => oe.oradoresEventos).ThenInclude(e => e.evento);
       }
 
       query = query.AsNoTracking().OrderBy(o => o.nome).Where(o => o.id == oradorId);

@@ -10,5 +10,5 @@ export interface Orador {
   email: string;
 
   redesSociais: RedeSocial[];
-  oradoresEvento: Evento[];
+  oradoresEventos: Evento[];
 }
