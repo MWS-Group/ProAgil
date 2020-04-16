@@ -9,6 +9,8 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { ToastrModule } from 'ngx-toastr';
+
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
 import { NavComponent } from './nav/nav.component';
@@ -25,6 +27,7 @@ import { DateTimeFormatPipePipe } from './helps/DateTimeFormatPipe.pipe';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TooltipModule.forRoot(),

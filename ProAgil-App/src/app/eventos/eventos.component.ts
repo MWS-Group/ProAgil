@@ -6,7 +6,6 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
-import { templateJitUrl } from '@angular/compiler';
 
 defineLocale('pt-br', ptBrLocale);
 
