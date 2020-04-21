@@ -14,6 +14,10 @@ import { ToastrModule } from 'ngx-toastr';
 import { AppComponent } from './app.component';
 import { EventosComponent } from './eventos/eventos.component';
 import { NavComponent } from './nav/nav.component';
+import { ContatosComponent } from './contatos/contatos.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { OradoresComponent } from './oradores/oradores.component';
+import { TituloComponent } from './shared/titulo/titulo.component';
 
 import { DateTimeFormatPipePipe } from './helps/DateTimeFormatPipe.pipe';
 
@@ -22,16 +26,24 @@ import { DateTimeFormatPipePipe } from './helps/DateTimeFormatPipe.pipe';
     AppComponent,
     EventosComponent,
     NavComponent,
+    OradoresComponent,
+    DashboardComponent,
+    ContatosComponent,
+    TituloComponent,
     DateTimeFormatPipePipe
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,

@@ -6,6 +6,7 @@ import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
+import { ToastrService } from 'ngx-toastr';
 
 defineLocale('pt-br', ptBrLocale);
 
@@ -16,9 +17,12 @@ defineLocale('pt-br', ptBrLocale);
 })
 export class EventosComponent implements OnInit {
 
+  title = 'Eventos';
+
   eventosFiltrados: Evento[];
-  eventos: any = [];
+  eventos: Evento[];
   evento: Evento;
+  dataEvento: string;
   modoSalvar = 'post';
   imagemLargura = 50;
   imagemMargem = 2;
@@ -32,7 +36,8 @@ export class EventosComponent implements OnInit {
     private eventoService: EventoService,
     private modalService: BsModalService,
     private fb: FormBuilder,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private toastr: ToastrService
   ) {
     this.localeService.use('pt-br');
   }
@@ -78,12 +83,10 @@ export class EventosComponent implements OnInit {
   getEventos() {
     this.eventoService.getAllEvento().subscribe(
       (eventos: Evento[]) => {
-        console.log(eventos.length);
-        console.log(eventos);
         this.eventos = eventos;
         this.eventosFiltrados = this.eventos;
       }, error => {
-        console.log(error);
+        this.toastr.error(`Erro ao tentar carregar eventos: ${error}`);
       });
   }
 
@@ -106,8 +109,9 @@ export class EventosComponent implements OnInit {
           (novoEvento: Evento) => {
             template.hide();
             this.getEventos();
+            this.toastr.success('Inserido');
           }, error => {
-            console.log(error);
+            this.toastr.error(`Erro ao tentar inserir: ${error}`);
           }
         );
       } else {
@@ -116,8 +120,9 @@ export class EventosComponent implements OnInit {
           () => {
             template.hide();
             this.getEventos();
+            this.toastr.success('Editado');
           }, error => {
-            console.log(error);
+            this.toastr.error(`Erro ao tentar editar: ${error}`);
           }
         );
       }
@@ -129,8 +134,9 @@ export class EventosComponent implements OnInit {
       () => {
         template.hide();
         this.getEventos();
+        this.toastr.success('Eliminado');
       }, error => {
-        console.log(error);
+        this.toastr.error('Erro ao tentar eliminar');
       }
     );
   }
