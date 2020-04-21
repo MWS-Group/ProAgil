@@ -1,3 +1,5 @@
+using System.Net.Http.Headers;
+using System.IO;
 using System.Collections.Generic;
 using AutoMapper;
 using System.Threading.Tasks;
@@ -39,6 +41,36 @@ namespace ProAgil.WebAPI.Controllers
       {
         return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco de Dados Falhou {ex.Message}");
       }
+    }
+
+    [HttpPost("upload")]
+    public async Task<IActionResult> Upload()
+    {
+      try
+      {
+        var file = Request.Form.Files[0]; // O meu arquivo
+        var folderName = Path.Combine("Resources", "Images"); // Diretório onde quero guardar
+        var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName); // Diretório da aplicação mais o diretório onde quero guardar
+
+        if (file.Length > 0)
+        {
+          var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName; // Qual é nome do meu arquivo
+          var fullPath = Path.Combine(pathToSave, filename.Replace("\"", " ").Trim()); // Se vier em aspas duplas ou espaço, removemos
+
+          using (var stream = new FileStream(fullPath, FileMode.Create)) // Criação do novo nome completo
+          {
+            file.CopyTo(stream); // Guarda no fullPath no stream
+          }
+        }
+
+        return Ok();
+      }
+      catch (System.Exception ex)
+      {
+        return this.StatusCode(StatusCodes.Status500InternalServerError, $"Banco Dados Falhou {ex.Message}");
+      }
+
+      return BadRequest("Erro ao tentar realizar upload");
     }
 
     // GET api/evento/id
