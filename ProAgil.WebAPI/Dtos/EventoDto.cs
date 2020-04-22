@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProAgil.WebAPI.Dto
+namespace ProAgil.WebAPI.Dtos
 {
   public class EventoDto
   {

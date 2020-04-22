@@ -1,4 +1,4 @@
-namespace ProAgil.WebAPI.Dto
+namespace ProAgil.WebAPI.Dtos
 {
   public class LoteDto
   {
